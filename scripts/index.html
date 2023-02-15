@@ -1,0 +1,509 @@
+
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+        <title>字幕エクスプレス</title>
+        <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <style type="text/css">
+            html, body {
+                height: 100%;
+                font-size: 13px;
+                margin: 0px;
+                padding: 0px;
+                box-sizing: border-box;
+                background-color: #689;
+            }
+
+            body {
+                padding: 12px 2.5vw 2.5vw 2.5vw;
+            }
+
+            #tabcontrol {
+                margin: 0px;
+                padding: 0px;
+            }
+
+            #tabcontrol .tabbtn {
+                background-color: #740;
+                display: inline-block;
+                margin: 0px 2px 0px 0px;
+                padding: 9px 14px 6px 14px;
+                border-radius: 8px 8px 0px 0px;
+                font-size: 115%;
+                color: #fff;
+            }
+            
+            #tabcontrol .tabbtn.tabactive {
+                background-color: #f4eed0;
+                color: #000;
+            }
+
+            /*Tab 1*/
+            #div_textinput, #div_result, #abouttab {
+                margin: 0px;
+                padding: 0px;
+                background-color: #f4eed0;
+            }
+
+            #div_textinput p {
+                margin: 0px;
+                padding: 10px 2.5vw 5px 2.5vw;
+            }
+
+            textarea {
+                margin: 0px 0px 2.5vw 2.5vw;
+                padding: 4px;
+                width: 90vw;
+                height: calc( 70vh + 50px );
+                border-color: #ca7;
+            }
+
+            /*Tab 2*/
+            #div_timetable {
+                margin: 0px;
+                padding: 0px 0px 2.5vw 0px;
+                background-color: #f4eed0;
+            }
+
+            .controller {
+                margin: 0px;
+                padding: 10px 2.5vw 10px 2.5vw;
+                background-color: #f4eed0;
+            }
+
+            .ctrl_btn {
+                display: inline-block;
+                background-color: #B07D29;
+                color: #fff;
+                border-radius: 10px;
+                margin: 4px;
+                padding: 10px;
+                font-size: 120%;
+            }
+            
+            #div_time {
+                display: inline-block;
+                background-color: #777;
+                color: #cfe;
+                border-radius: 10px;
+                margin: 4px;
+                padding: 10px;
+                font-size: 110%;
+                width: 3em;
+                text-align: right;
+                font-family: Consolas, Courier New, Courier, monospace;
+            }
+            
+            .ctrl_btn:active {
+                display: inline-block;
+                background-color: #833A00;
+                color: #fff;
+                border-radius: 10px;
+                margin: 4px;
+                padding: 10px;
+                font-size: 120%;
+            }
+            
+            .ctrl_btn.btn_alert {
+                background-color: #d00;
+            }
+
+            #current_time {
+                text-align: right;
+            }
+
+            
+            thead {
+                display: block;
+            }
+            tbody {
+                display: block;
+                overflow-x: hidden;
+                overflow-y: scroll;
+                height: 70vh;
+            }
+
+            table {
+                border-collapse: collapse;
+                background-color: #fff;
+                margin: 0px 0px 0vw 2.5vw;
+                width: 90vw;
+                color: #666;
+                background-color: #eee;
+            }
+
+            th {
+                background-color: #B07D29;
+                color: #fff;
+            }
+
+            th, td {
+                height: 3.6ex;
+                border-width: 0px 0px 1px 0px;
+                border-style: solid;
+                border-color: #bbb;
+                font-size: 80%;
+                padding: 6px;
+                line-height: 150%;
+            }
+            
+            tr {
+            }
+
+            .selected_tr {
+                color: #000;
+                background-color: #fff;
+            }
+
+            /* Tab 3 */
+
+            /* Tab 4 */
+            #aboutmain h1,h2,p {
+                margin: 0px;
+                padding: 0px;
+            }
+            
+            #aboutmain h1 {
+                padding: 20px 0px 10px 0px;
+                text-align: center;
+                font-size: 180%;
+            }
+            
+            #aboutmain h2 {
+                padding: 10px 0px 10px 0px;
+                text-align: center;
+                font-size: 140%;
+            }
+
+            #aboutmain p {
+                text-align: center;
+                font-size: 130%;
+                margin: 10px 30px;
+                line-height: 144%;
+            }
+
+            #aboutmain td.about_key {
+                background-color: #444;
+                color: #fff;
+                font-weight: bold;
+                padding: 2px 11px;
+                margin: 2px;
+                border-radius: 3px;
+            }
+
+            #aboutmain table,#aboutmain tr,#aboutmain td,#aboutmain tbody,#aboutmain thead {
+                background-color: transparent;
+                color: #000;
+                border-color: transparent;
+                border-collapse: separate;
+                border-spacing: 4px;
+            }
+            #aboutmain tbody {
+                overflow-x: auto;
+                overflow-y: auto;
+                height: 100%;
+            }
+            
+            #aboutmain td {
+                margin: 5px;
+            }
+            #aboutmain table {
+                width: 280px;
+                height: auto;
+                margin: 3px auto 10px auto;
+            }
+
+            @media screen and (max-width: 959px) {
+            }
+            @media screen and (max-width: 480px) {
+                tbody {
+                    display: block;
+                    overflow-x: hidden;
+                    overflow-y: scroll;
+                    height: 60vh;
+                }
+            }
+            #youtube {
+                position: relative;
+                width: 100%;
+            }
+            #youtube:before {
+                content:"";
+                display: block;
+                padding-top: 56.25%;
+            }
+            #ytif {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <!-- メニューバー -->
+            <div id="tabcontrol">
+                <div class="tabbtn" v-bind:class="{ tabactive : tab==1 }" v-on:click="tryChangeTab(1)">原稿</div>
+                <div class="tabbtn" v-bind:class="{ tabactive : tab==2 }"  v-on:click="tryChangeTab(2)">計測</div>
+                <div class="tabbtn" v-bind:class="{ tabactive : tab==3 }"  v-on:click="tryChangeTab(3)">出力</div>
+                <div class="tabbtn" v-bind:class="{ tabactive : tab==4 }"  v-on:click="tryChangeTab(4)">About</div>
+            </div>
+            
+            <!-- 字幕入力タブ -->
+            <div id="div_textinput" v-show="tab==1">
+                <div><p id="hoge">字幕を入力してください</p></div>
+                <textarea v-model="jimaku_input_text">
+                </textarea>
+                
+            </div>
+            
+            <!-- 時刻タブ -->
+            <div id="div_timetable" v-show="tab==2" v-on:keyup.page-down="recordTimeStamp()">
+
+                <div class="controller">
+                    <div class="ctrl_btn" v-on:click="toggleTimer()">開始・停止</div>
+                    <div class="ctrl_btn" v-on:click="resetTimer()">リセット</div>
+                    <div class="ctrl_btn" v-on:click="changeSpeed()" v-bind:class="{ btn_alert : timer_speed > 1.0 }">x {{ timer_speed }}</div>
+                    <div style="clear:both;"></div>
+                    <div class="ctrl_btn" v-on:click="recordTimeStamp()">記録</div>
+                    <div class="ctrl_btn" v-on:click="selectPrevLine()">１行 上へ</div>
+                    <div id="div_time">{{timer_main_value | timeFilter}}</div>
+                </div>
+
+                <table id="timetable">
+                    <thead>
+                        <tr>
+                            <th style="width:20vw;">時刻</th>
+                            <th style="width:70vw;">字幕</th>
+                        </tr>
+                    </thead>
+                    <!-- 本体
+                    時刻とテキストを表示
+                    選択された行は強調表示、クリックで行選択 -->
+                    <tbody>
+                        <tr v-for="(item, index) in jimaku_lines_obj" v-bind:class="{ selected_tr : index==selected_line }" v-on:click="selected_line=index">
+                            <td style="width:20vw;"><span v-show="item.time!=-1">{{ item.time | timeFilter }}</span></td>
+                            <td style="width:70vw;">{{ item.text }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+            
+            <!-- 出力タブ -->
+            <div id="div_result" v-show="tab==3">
+                <div class="controller">
+                    <div class="ctrl_btn" v-on:click="copyToClip()">コピー</div>
+                </div>
+                <textarea v-model="jimaku_result">
+                </textarea>                
+            </div>
+            
+            <!-- Aboutタブ -->
+            <div id="abouttab" v-show="tab==4">
+                <div id="aboutmain">
+
+                    <h1>字幕エクスプレス</h1>
+                    <p>世界最速。AviUtlのための動画字幕入力支援ソフトウェア。</p>
+
+                    <h2>使い方動画</h2>
+                    <div id="youtube">
+                    <iframe id="ytif" width="560" height="315" src="https://www.youtube.com/embed/TtNMYZWfds0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                    <h2>開発者</h2>
+                    <p>TwitterとYouTubeチャンネルにて本ソフトウェアのご意見、ご要望を承っております。</p>
+
+                    <h2>キーボードショートカット</h2>
+                    <p>計測画面のみキーボードショートカットに対応しています。</p>
+                    <table>
+                        <tr><td class="about_key">A</td><td>時刻を記録して下の行へ</td></tr>
+                        <tr><td class="about_key">Q</td><td>上の行へ</td></tr>
+                        <tr><td class="about_key">Z</td><td>下の行へ</td></tr>
+                        <tr><td class="about_key">T</td><td>タイマー開始・停止</td></tr>
+                        <tr><td class="about_key">R</td><td>タイマーリセット</td></tr>
+                    </table>
+
+                    <h2>このソフトについて</h2>
+                    <p>字幕のタイミング合わせが簡単にできます。ナレーション音声を聞きながら<sup>*</sup>「記録」ボタンを押すと、
+                        ボタンを押した時刻が記録されます。
+                        AviUtlの制御文字（cタグ）を含んだテキストとして出力できるため、これをAviUtlでコピペするだけで完璧にタイミングが合った字幕を挿入することができます。
+                    </p>
+                    <p style="font-size:70%;">* もちろんナレーションを録音しながら記録することもできます。（非推奨）</p>
+
+                    
+                    <h2>記録タブの操作方法の説明</h2>
+                    <p>「リセット」は時計を0秒にリセットします。
+                    最初からやり直したいときに使います。</p>
+
+                    <p>「x 1」のボタンは時計の速度を変更することができます。
+                    例えば、ここを「x 2」に設定して、
+                    音声を倍速再生しながら時刻を打つなんて使い方ができます。</p>
+
+                    <p>「１行 上へ」ボタンは、カーソルを１行上に移動するボタンです。
+                    行を送りすぎたときに１行手前に戻ることができます。</p>
+
+                    <p>テーブルをクリックすると、その行にカーソルを移動することができます。</p>
+
+                    
+                    <h2 style="font-size:95%;">The MIT License</h2>
+                    <p style="font-size:95%; text-align:left;">Copyright (c) 2020 龍堂もも</p>
+                    <p style="font-size:95%; text-align:left;">以下に定める条件に従い、本ソフトウェアおよび関連文書のファイル（以下「ソフトウェア」）の複製を取得するすべての人に対し、ソフトウェアを無制限に扱うことを無償で許可します。
+                        これには、ソフトウェアの複製を使用、複写、変更、結合、掲載、頒布、サブライセンス、および/または販売する権利、およびソフトウェアを提供する相手に同じことを許可する権利も無制限に含まれます。</p>
+                    <p style="font-size:95%; text-align:left;">上記の著作権表示および本許諾表示を、ソフトウェアのすべての複製または重要な部分に記載するものとします。</p>
+                    <p style="font-size:95%; text-align:left;">ソフトウェアは「現状のまま」で、明示であるか暗黙であるかを問わず、何らの保証もなく提供されます。
+                        ここでいう保証とは、商品性、特定の目的への適合性、および権利非侵害についての保証も含みますが、それに限定されるものではありません。
+                        作者または著作権者は、契約行為、不法行為、またはそれ以外であろうと、ソフトウェアに起因または関連し、
+                        あるいはソフトウェアの使用またはその他の扱いによって生じる一切の請求、損害、その他の義務について何らの責任も負わないものとします。</p>
+
+
+                </div>
+            </div>
+        </div>
+    </body>
+
+    
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                tab: 1,
+                // Tab 1 objs
+                jimaku_input_text: '',
+                // Tab 2 objs
+                jimaku_lines_obj: [
+                ],
+                selected_line: 0,
+                timer_main_value: 0,
+                timer_is_running: false,
+                timer_start_time: 0,
+                timer_resume_offset: 0,
+                timer_obj: null,
+                timer_speed: 1,
+                // Tab 3 objs
+                jimaku_result: ''
+            },
+
+            created() {
+                window.addEventListener('keyup', this.keyEventHandler);
+            },
+
+            methods: {
+                tryChangeTab: function(tab_num) { // タブ切り替え時のイベント
+                    if (tab_num==1) {
+                        var eraseconfirm = window.confirm('原稿入力に戻ると記録した時刻情報は消去されます。本当に続けますか？');
+                        if (eraseconfirm) this.tab = 1;
+                        else return;
+                    }
+                    
+                    if (this.tab==1 && tab_num==2) this.updateTable(); // 原稿入力→計測の遷移時にテーブルを更新
+                    if (tab_num==3) this.createResult(); // 出力への遷移時にタグ付きテキストを生成
+                    this.tab = tab_num;
+                },
+
+                updateTable: function() {
+                    this.selected_line = 0;
+                    this.jimaku_lines_obj = [];
+
+                    var lines = this.jimaku_input_text.split('\n');
+                    for(var i=0; i<lines.length; i++) {
+                        this.jimaku_lines_obj.push({ time: -1, text: lines[i]});
+                    }
+                },
+                
+                toggleTimer: function() {
+                    if (!this.timer_is_running) {
+                        current_time = new Date().getTime();
+                        this.timer_start_time = current_time;
+                        this.timer_obj = setInterval(this.onTimer, 33.333);
+                        this.timer_is_running = true;
+                    }
+                    else {
+                        this.timer_resume_offset = this.timer_main_value;
+                        clearInterval(this.timer_obj);
+                        this.timer_is_running = false;
+                    }
+                },
+
+                resetTimer: function() {
+                    this.timer_resume_offset = 0;
+                    this.timer_main_value = 0;
+                },
+
+                onTimer: function() {
+                    current_time = new Date().getTime();
+                    this.timer_main_value = (current_time - this.timer_start_time) / 1000.0 * this.timer_speed + this.timer_resume_offset;
+                },
+
+                recordTimeStamp: function() {
+                    if (!this.timer_is_running) return;
+                    this.jimaku_lines_obj[this.selected_line].time = this.timer_main_value;
+                    this.selectNextLine();
+                },
+
+                selectPrevLine: function() {
+                    this.selected_line--;
+                    if (this.selected_line < 0) this.selected_line = 0;
+                },
+                
+                selectNextLine: function() {
+                    this.selected_line++;
+                    if (this.selected_line >= this.jimaku_lines_obj.length) {
+                        this.selected_line = this.jimaku_lines_obj.length - 1;
+                    }
+                },
+
+                createResult:function() {
+                    this.jimaku_result = this.jimaku_lines_obj[0].text + "\n<c" + this.jimaku_lines_obj[0].time.toFixed(2) + ">";
+                    for(var i=1; i<this.jimaku_lines_obj.length; i++) {
+                        var timediff = this.jimaku_lines_obj[i].time - this.jimaku_lines_obj[i-1].time;
+                        if (timediff > 0) {
+                            this.jimaku_result += this.jimaku_lines_obj[i].text + "\n<c" + timediff.toFixed(2) + ">";
+                        }
+                        else {
+                            this.jimaku_result += this.jimaku_lines_obj[i].text + "\n";
+                        }
+                    }
+                },
+                
+                copyToClip: function() {
+                    navigator.clipboard.writeText(this.jimaku_result);
+                },
+
+                changeSpeed: function() {
+                    if (this.timer_is_running) return;
+                    this.timer_speed += 0.25;
+                    if (this.timer_speed > 3.0) this.timer_speed = 1.0;
+                },
+
+                keyEventHandler:function(event) {
+                    switch (event.code) {
+                    case "KeyA":
+                        this.recordTimeStamp();
+                        break;
+                    case "KeyQ":
+                        this.selectPrevLine();
+                        break;
+                    case "KeyZ":
+                        this.selectNextLine();
+                        break;
+                    case "KeyT":
+                        this.toggleTimer();
+                        break;
+                    case "KeyR":
+                        this.resetTimer();
+                        break;
+                    }
+                }
+            },
+            filters: {
+                timeFilter: function(time_num) {
+                    return time_num.toFixed(2);
+                }
+            }
+        });
+    </script>
+</html>
